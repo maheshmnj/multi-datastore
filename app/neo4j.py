@@ -27,7 +27,10 @@ class Neo4JApp:
                 max_capacity: 100,
                 created_at: "2023-04-09T10:00:00Z"
                 })
-            CREATE(e)-[:TAGGED_WITH]->(t1)
+            WITH e
+            MATCH (e:Event {id: '0d7ee532-9a9c-4df8-8b02-52c5483b3c79'})
+            MERGE (t:Tag {tag_name: 'Innovation'})
+            MERGE (e)-[:HAS_TAG]->(t)
             """)
         with self.driver.session(database="neo4j") as session:
             # Write transactions allow the driver to handle retries and transient errors
