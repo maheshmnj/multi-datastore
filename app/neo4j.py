@@ -12,6 +12,36 @@ class Neo4JApp:
         # Don't forget to close the driver connection when you are finished with it
         self.driver.close()
 
+    def insert_events(self):
+        insertQuery = (
+            """
+            CREATE (e:Event {
+                id: "0d7ee532-9a9c-4df8-8b02-52c5483b3c79",
+                name: "Tech Summit",
+                description: "Join us for a day of talks and networking with industry leaders in tech",
+                starts_at: "2023-05-12T09:00:00Z",
+                ends_at: "2023-05-12T17:00:00Z",
+                cover_image: "https://example.com/images/tech_summit.jpg",
+                address: "123 Main St, Anytown, USA",
+                private: false,
+                max_capacity: 100,
+                created_at: "2023-04-09T10:00:00Z"
+                })
+            CREATE(e)-[:TAGGED_WITH]->(t1)
+            """)
+        with self.driver.session(database="neo4j") as session:
+            # Write transactions allow the driver to handle retries and transient errors
+            result = session.execute_write(self._insert_and_return_event, insertQuery)
+            for row in result:
+                print("Created event: {row}".format(row=row))
+
+    @staticmethod
+    def _insert_and_return_event(tx, insertQuery):
+        result = tx.run(insertQuery)
+        return [{"id": row["id"], "name": row["name"]}
+                for row in result]
+
+
     def create_tags(self):
         insertQuery = (
             """

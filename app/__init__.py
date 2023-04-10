@@ -47,14 +47,14 @@ def get_users():
 
 # API endpoint to get all events
 @app.route('/events', methods=['GET'])
-def get_events():
+def insert_events():
     uri = "neo4j+s://fc691a1c.databases.neo4j.io"
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
     load_dotenv(dotenv_path)
     user = os.environ.get('USERNAME_NEO4J')
     password = os.environ.get("PASSWORD_NEO4J")
-    print( "user: " + user + " password: " + password)
     neo4jApp = Neo4JApp(uri, user, password)
+    result = neo4jApp.insert_events()
     result = neo4jApp.create_tags()
     neo4jApp.close()
     return jsonify({'events': 'success'})
