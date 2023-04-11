@@ -251,7 +251,6 @@ event_dicts = [
 ]
 
 
-
 if __name__ == '__main__':
     event = Event()
     user = User()
@@ -267,9 +266,10 @@ if __name__ == '__main__':
     #     print(event.event_to_dict()['id'])
 
     # Get Bookmarks
-    user = user.user_from_dict(user_dicts[1])
-    bookmarked_events = event.get_bookmarks(user)
-    for bookmarked_event in bookmarked_events:
-       temp_event = event.bookmarked_event_from_dict(bookmarked_event)
-       temp_event.user = user 
-       print(temp_event.name)
+
+    # user = user.user_from_dict(user_dicts[1])
+    # bookmarked_events = event.get_bookmarks(user)
+    # for bookmarked_event in bookmarked_events:
+    #    temp_event = event.bookmarked_event_from_dict(bookmarked_event)
+    #    temp_event.user = user
+    #    print(temp_event.name)
