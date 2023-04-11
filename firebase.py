@@ -53,6 +53,18 @@ class Event:
         self.user = event_dict['user']
         return self
 
+    def bookmarked_event_from_dict(self, event_dict):
+        self.id = event_dict['id']
+        self.name = event_dict['name']
+        self.description = event_dict['description']
+        self.startsAt = event_dict['startsAt']
+        self.endsAt = event_dict['endsAt']
+        self.cover_image = event_dict['cover_image']
+        self.address = event_dict['address']
+        self.private = event_dict['private']
+        self.deleted = event_dict['deleted']
+        return self
+
     def insert_bookmark(self,user):
         doc_ref = db.collection(u'bookmarks').document(u'{}'.format(user.email))
         doc_ref.set({
@@ -63,7 +75,7 @@ class Event:
             u'avatar_url': user.avatar_url,
         })
         doc_ref.collection(u'events').document().set({
-            u'event_id': self.id,
+            u'id': self.id,
             u'user_id': user.user_id,
             u'name': self.name,
             u'description': self.description,
@@ -75,6 +87,13 @@ class Event:
             u'deleted': self.deleted,
         })
 
+    def get_bookmarks(self,user):
+        doc_ref = db.collection(u'bookmarks').document(u'{}'.format(user.email))
+        doc = doc_ref.collection(u'events').get()
+        events = []
+        for event in doc:
+            events.append(event.to_dict())
+        return events
 
 
 class User:
@@ -121,6 +140,15 @@ user_dicts = [
         'username': 'johndoe',
         'isAdmin': False,
         'name': 'Jane Doe',
+        'createdAt': '2019-01-01 00:00:00',
+    },
+    {
+        'user_id':  'e3cd5c37-00a9-46ff-9004-0afac0df9c70',
+        'email': 'dianeparker@example.com',
+        'avatar_url': 'http://example.com/avatar3.jpg',
+        'isAdmin': False,
+        'username': 'dianeparker',
+        'name': 'Diane Parker',
         'createdAt': '2019-01-01 00:00:00',
     }
 ]
@@ -228,12 +256,20 @@ if __name__ == '__main__':
     event = Event()
     user = User()
 
-    for i in range(0, len(event_dicts)):
-        event_dict = event_dicts[i]
-        user_dict = user_dicts[i% len (user_dicts)]
-        event = event.event_from_dict(event_dict)
-        user = user.user_from_dict(user_dict)
-        event.insert_bookmark(user)
-        print(event.event_to_dict())
+    # Insert Bookmarks
 
+    # for i in range(0, len(event_dicts)):
+    #     event_dict = event_dicts[i]
+    #     user_dict = user_dicts[i% len (user_dicts)]
+    #     event = event.event_from_dict(event_dict)
+    #     user = user.user_from_dict(user_dict)
+    #     event.insert_bookmark(user)
+    #     print(event.event_to_dict()['id'])
 
+    # Get Bookmarks
+    user = user.user_from_dict(user_dicts[1])
+    bookmarked_events = event.get_bookmarks(user)
+    for bookmarked_event in bookmarked_events:
+       temp_event = event.bookmarked_event_from_dict(bookmarked_event)
+       temp_event.user = user 
+       print(temp_event.name)
