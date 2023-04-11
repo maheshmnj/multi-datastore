@@ -86,3 +86,5 @@ class Neo4JApp:
         result = tx.run(query)
         return [{"tag_id": row["tag_id"], "tag_name": row["tag_name"]}
                 for row in result]
+
+
