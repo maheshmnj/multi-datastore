@@ -150,11 +150,20 @@ user_dicts = [
         'username': 'dianeparker',
         'name': 'Diane Parker',
         'createdAt': '2019-01-01 00:00:00',
+    },
+    {
+        'user_id':  '1e5de463-efd5-442e-be3f-31c937c75d3a',
+        'email': 'markjohnson@example.com',
+        'avatar_url': 'http://example.com/avatar5.jpg',
+        'isAdmin': False,
+        'username': 'markjohnson',
+        'name': 'Mark Johnson',
+        'createdAt': '2019-01-01 00:00:00',
     }
+
 ]
 
 event_dicts = [
-    # (id, created_at, name, description, starts_at, ends_at, cover_image, address, private, deleted, user_id)
 
     {
         "id": "b293293b-b133-4a2b-8aa4-d9afb488c680",
@@ -257,13 +266,13 @@ if __name__ == '__main__':
 
     # Insert Bookmarks
 
-    # for i in range(0, len(event_dicts)):
-    #     event_dict = event_dicts[i]
-    #     user_dict = user_dicts[i% len (user_dicts)]
-    #     event = event.event_from_dict(event_dict)
-    #     user = user.user_from_dict(user_dict)
-    #     event.insert_bookmark(user)
-    #     print(event.event_to_dict()['id'])
+    for i in range(0, len(event_dicts)):
+        event_dict = event_dicts[i]
+        user_dict = user_dicts[i% len (user_dicts)]
+        event = event.event_from_dict(event_dict)
+        user = user.user_from_dict(user_dict)
+        event.insert_bookmark(user)
+        print(event.event_to_dict()['id'])
 
     # Get Bookmarks
 
